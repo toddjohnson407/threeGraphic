@@ -34,3 +34,17 @@ let detectCollision = (obj1, obj2) => {
 
   return box1.intersectsBox(box2);
 }
+
+/**
+ * Kills running animation
+ */
+let gameOver = () => {
+  alive = false;
+  document.removeEventListener('keyup', playerJump, false);
+  document.addEventListener('keydown', playerMove, false);
+}
+
+/** Linear interpolation function */
+let lip = (a, b, t) => a + (b - a) * t;
+
+let ease = (t) => t < 0.5 ? 2*t*t : -1+(4-2*t)*t

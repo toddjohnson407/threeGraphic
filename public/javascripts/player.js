@@ -5,6 +5,7 @@
 class Player {
   
   jumping;
+  moving;
   meshObj;
 
   constructor(width, height, { position = [-3, -1.5, 1.65], color = '#019CBB', depth = 0.5 }) {
@@ -15,6 +16,7 @@ class Player {
     this.position = position;
     this.jumping = false;
     this.meshObj = null;
+    this.moving = { right: false, left: false }
   }
 
   mesh() {
@@ -28,30 +30,37 @@ class Player {
   }
 
   move(keyCode) {
-    console.log(keyCode);
-    if (keyCode == 37) {
-      this.meshObj.position.x -= playerSpeed;
-    } else if (keyCode == 39) {
-      this.meshObj.position.x += playerSpeed;
-    } else if (keyCode === 32 && !this.jumping && this.meshObj.position.y === -1.5) this.jumping = true;
+    if (keyCode == 39) {
+      // this.meshObj.position.x -= playerSpeed;
+      this.moving.right = false
+      this.moving.left = true;
+    } else if (keyCode == 37) {
+      this.moving.left = false;
+      this.moving.right = true;
+      // this.meshObj.position.x += playerSpeed;
+    }
+  }
+
+  stopMove(keyCode) {
+    // this.moving.left = false;
+    // this.moving.right = false;
+    if (keyCode == 39) {
+      // this.meshObj.position.x -= playerSpeed;
+      // this.moving.right = true;
+      this.moving.left = false;
+      console.log('STOPP');
+    } else if (keyCode == 37) {
+      // this.moving.left = true;
+      this.moving.right = false;
+      // this.meshObj.position.x += playerSpeed;
+    }
   }
 
   /**
    * Performs player object jump motion
    */
-  jump = async () => {
-    // console.log(this.meshObj.position.y)
-    this.jumping = true;
-    for (let i = 0; i < 90; i++) {
-      await sleep(1);
-      this.meshObj.translateX(0.03);
-
-    }
-    for (let i = 0; i < 90; i++) {
-      await sleep(1);
-      this.playerPosY(-0.03);
-    }
-  }
+  jump = () => this.jumping = true
+  stopJump = () => this.jumping = false
 
   /** Sets jumping to true once player has landed */
   landed = (keyCode) => keyCode === 32 && (this.jumping = false);
