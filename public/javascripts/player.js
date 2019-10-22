@@ -7,6 +7,8 @@ class Player {
   jumping;
   moving;
   meshObj;
+  onPlat;
+  falling;
 
   constructor(width, height, { position = [-3, -1.5, 1.65], color = '#019CBB', depth = 0.5 }) {
     this.width = width;
@@ -15,6 +17,8 @@ class Player {
     this.color = color;
     this.position = position;
     this.jumping = false;
+    this.onPlat = false;
+    this.falling = false;
     this.meshObj = null;
     this.moving = { right: false, left: false }
   }
@@ -31,29 +35,24 @@ class Player {
 
   move(keyCode) {
     if (keyCode == 39) {
-      // this.meshObj.position.x -= playerSpeed;
       this.moving.right = false
       this.moving.left = true;
     } else if (keyCode == 37) {
       this.moving.left = false;
       this.moving.right = true;
-      // this.meshObj.position.x += playerSpeed;
     }
   }
 
   stopMove(keyCode) {
-    // this.moving.left = false;
-    // this.moving.right = false;
     if (keyCode == 39) {
-      // this.meshObj.position.x -= playerSpeed;
-      // this.moving.right = true;
       this.moving.left = false;
-      console.log('STOPP');
     } else if (keyCode == 37) {
-      // this.moving.left = true;
       this.moving.right = false;
-      // this.meshObj.position.x += playerSpeed;
     }
+  }
+
+  fall = () => {
+    
   }
 
   /**
