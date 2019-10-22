@@ -29,22 +29,10 @@ let ground = new THREE.Mesh(groundGeo, groundMat);
 ground.position.set(0, -3.1, 0);
 scene.add(ground, player.mesh());
 
-
-
-/**
- * Performs player object jump motion
- * 
- * @param {*} e keyup event
- */
-// let playerJump = async (e = window.event) => (e.code === 'Space' && !player.jumping) && player.jump()
-let playerJump = (e = window.event) => {
-  // if (e.code === 'Space' && player.jumping === false) player.jump();
-};
 /**
  * Performs player object movement
  */
 let playerMove = (e = window.event) => {
-  // console.log(e.which);
   if (e.code === 'Space' && player.jumping === false) player.jump();
   else player.move(e.which);
 }
@@ -68,22 +56,34 @@ document.addEventListener('keyup', playerStop, false);
 let obstacle = obstacles[0];
 
 var fps = 60;
-var duration = 2.0;               // seconds
+var duration = 1.0;               // seconds
 var step = 1 / (duration * fps);  // t-step per frame
 var t = 0, dt = 0.02;
-
 // Performs animations on current scene
 let animate = () => {
 
   obstacles.forEach(obst => (detectCollision(player.mesh(), obst.mesh()) && gameOver()))
 
   if (player.jumping) {
-    console.log(plyrY);
+    player.stopFall();
     let newY = lip(plyrY, 1, ease(t));  
     player.mesh().position.y = newY;  // set new position
     t += dt;
     if (t <= 0 || t >= 1) dt = -dt; 
   }
+
+  if (player.falling && player.mesh().position.y === -1.5) {
+    plyrY = -1.5;
+    player.stopFall()
+  }
+  if (player.falling) {
+    player.stopJump();
+    let newY = lip(plyrY, -1.5, ease(t));  
+    player.mesh().position.y = newY;  // set new position
+    t += dt;
+    if (t <= 0 || t >= 1) dt = -dt; 
+  }
+
   if (player.jumping && player.mesh().position.y === plyrY) player.stopJump()
 
   platforms.forEach(platform => {
@@ -93,11 +93,15 @@ let animate = () => {
       plyrY = platform.mesh().position.y + 0.35;
       player.mesh().position.y = plyrY;
       player.stopJump();
-    } else if (player.onPlat && !isColl && !player.jumping) {
-      plyrY = -1.5;
+      player.stopFall();
+    } else if (player.onPlat && !isColl) {
+      // player.jump();
+      player.fall();
+      // console.log(player.falling);
+      // plyrY = -1.5;
       player.onPlat = false;
-      player.jump();
-    }
+    } else if (!player.onPlat && !isColl) player.fall();
+    // else toY = plyrY;
   })
 
   if (player.moving.left) {

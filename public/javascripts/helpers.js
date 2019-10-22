@@ -56,7 +56,7 @@ let detectPlatformLand = (obj1, obj2) => {
  */
 let gameOver = () => {
   alive = false;
-  document.removeEventListener('keyup', playerJump, false);
+  document.removeEventListener('keyup', playerStop, false);
   document.addEventListener('keydown', playerMove, false);
 }
 

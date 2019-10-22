@@ -61,8 +61,14 @@ class Player {
   jump = () => this.jumping = true
   stopJump = () => this.jumping = false
 
-  /** Sets jumping to true once player has landed */
-  landed = (keyCode) => keyCode === 32 && (this.jumping = false);
+  /**
+   * Performs player object fall motion
+   */
+  fall = () => this.falling = true
+  stopFall = () => this.falling = false
+
+  // /** Sets jumping to true once player has landed */
+  // landed = (keyCode) => keyCode === 32 && (this.jumping = false);
 
 
   /** Moves the player's y position by inc */
