@@ -35,6 +35,23 @@ let detectCollision = (obj1, obj2) => {
   return box1.intersectsBox(box2);
 }
 
+let rays = [
+  // new THREE.Vector3(0, 0, 1),
+  // new THREE.Vector3(1, 0, 1),
+  // new THREE.Vector3(1, 0, 0),
+  // new THREE.Vector3(1, 0, -1),
+  // new THREE.Vector3(0, 0, -1),
+  // new THREE.Vector3(-1, 0, -1),
+  // new THREE.Vector3(-1, 0, 0),
+  // new THREE.Vector3(-1, 0, 1)
+  new THREE.Vector3(-1, 0, 0),
+  new THREE.Vector3(1, 0, 0),
+  // new THREE.Vector3(-1, , 0),
+];
+
+let caster = new THREE.Raycaster();
+caster.far = 1;
+
 /** Detects when player lands on a platform */
 let detectPlatformLand = (obj1, obj2) => {
   obj1.geometry.computeBoundingBox();
@@ -45,10 +62,17 @@ let detectPlatformLand = (obj1, obj2) => {
   box1.applyMatrix4(obj1.matrixWorld);
   var box2 = obj2.geometry.boundingBox.clone();
   box2.applyMatrix4(obj2.matrixWorld);
-  // console.log(obj1, box1);
-  // console.log(obj2, box2);
+
+  // let isCollision = false;
+  // for (let i = 0; i < rays.length; i++) {
+  //   caster.set(obj2.position, rays[i]);
+  //   let collide = caster.intersectObject(obj1);
+  //   if (collide.length) isCollision = true;
+  // }
+
   
   return box1.intersectsBox(box2)
+  // return isCollision;
 }
 
 /**

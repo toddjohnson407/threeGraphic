@@ -33,7 +33,7 @@ scene.add(ground, player.mesh());
  * Performs player object movement
  */
 let playerMove = (e = window.event) => {
-  if (e.code === 'Space' && player.jumping === false) player.jump();
+  if (e.code === 'Space' && player.jumping === false && !player.falling) player.jump();
   else player.move(e.which);
 }
 
@@ -55,37 +55,32 @@ document.addEventListener('keyup', playerStop, false);
 
 let obstacle = obstacles[0];
 
-var fps = 60;
-var duration = 1.0;               // seconds
-var step = 1 / (duration * fps);  // t-step per frame
 var t = 0, dt = 0.02;
+var t2 = 0, dt2 = 0.02;
+
 // Performs animations on current scene
 let animate = () => {
-
+  
   obstacles.forEach(obst => (detectCollision(player.mesh(), obst.mesh()) && gameOver()))
 
-  if (player.jumping) {
-    player.stopFall();
-    let newY = lip(plyrY, 1, ease(t));  
-    player.mesh().position.y = newY;  // set new position
-    t += dt;
-    if (t <= 0 || t >= 1) dt = -dt; 
-  }
-
-  if (player.falling && player.mesh().position.y === -1.5) {
-    plyrY = -1.5;
-    player.stopFall()
-  }
-  if (player.falling) {
-    player.stopJump();
+  if (player.falling && !player.jumping) {
+    // console.log('falling', plyrY);
     let newY = lip(plyrY, -1.5, ease(t));  
     player.mesh().position.y = newY;  // set new position
-    t += dt;
-    if (t <= 0 || t >= 1) dt = -dt; 
+    t -= dt;
+    // if (t <= 0 || t >= 1) dt = -dt;
+    // if (t2 <= 0 || t2 >= 1) player.stopFall();
   }
-
-  if (player.jumping && player.mesh().position.y === plyrY) player.stopJump()
-
+  if (player.jumping && !player.falling) {
+    let newY = lip(plyrY, 1, ease(t2));
+    // console.log('jumping', plyrY, newY);
+    player.mesh().position.y = newY;  // set new position
+    t2 += dt2;
+    if (t2 <= 0 || t2 >= 1) dt2 = -dt2;
+  }
+  
+  
+  
   platforms.forEach(platform => {
     let isColl = detectPlatformLand(player.mesh(), platform.mesh());
     if (isColl && !player.onPlat) {
@@ -94,15 +89,23 @@ let animate = () => {
       player.mesh().position.y = plyrY;
       player.stopJump();
       player.stopFall();
-    } else if (player.onPlat && !isColl) {
-      // player.jump();
+      // t2 = 0; dt2 = 0.02;
+      t = 0; dt = 0.02;
+    } else if (player.onPlat && !isColl && !player.jumping) {
+      player.stopJump();
+      t2 = 0; dt2 = 0.02;
+      plyrY = platform.mesh().position.y + 0.35;
       player.fall();
-      // console.log(player.falling);
-      // plyrY = -1.5;
       player.onPlat = false;
-    } else if (!player.onPlat && !isColl) player.fall();
-    // else toY = plyrY;
-  })
+    }
+  });
+  
+  if (player.falling && player.mesh().position.y <= -1.5) {
+    player.stopFall();
+    dt2 = 0.02; t2 = 0;
+    plyrY = -1.5;
+  }
+  if (player.jumping && player.mesh().position.y === plyrY) player.stopJump()
 
   if (player.moving.left) {
     player.mesh().position.x += 0.05;
