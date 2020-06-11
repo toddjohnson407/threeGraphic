@@ -34,21 +34,21 @@ class Player {
   }
 
   move(keyCode) {
-    if (keyCode == 39) {
-      this.moving.right = false
-      this.moving.left = true;
-    } else if (keyCode == 37) {
-      this.moving.left = false;
-      this.moving.right = true;
-    }
+    // if (keyCode == 39) {
+    //   this.moving.right = false
+    //   this.moving.left = true;
+    // } else if (keyCode == 37) {
+    //   this.moving.left = false;
+    //   this.moving.right = true;
+    // }
   }
 
   stopMove(keyCode) {
-    if (keyCode == 39) {
-      this.moving.left = false;
-    } else if (keyCode == 37) {
-      this.moving.right = false;
-    }
+    // if (keyCode == 39) {
+    //   this.moving.left = false;
+    // } else if (keyCode == 37) {
+    //   this.moving.right = false;
+    // }
   }
 
   fall = () => {
@@ -58,8 +58,8 @@ class Player {
   /**
    * Performs player object jump motion
    */
-  jump = () => this.jumping = true
-  stopJump = () => this.jumping = false
+  jump = (preX, postX) => this.jumping = true;
+  stopJump = () => this.jumping = false;
 
   /**
    * Performs player object fall motion
