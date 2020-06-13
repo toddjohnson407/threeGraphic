@@ -6,7 +6,7 @@ class Platform {
   
   meshObj;
 
-  constructor(width, height, { position = [0, -0.75, 1.65], color = '#019CBB', depth = 0.5 }) {
+  constructor(width, height, { position = [0, -0.9, 1.65], color = '#019CBB', depth = 0.5 }) {
     this.width = width;
     this.height = height;
     this.depth = depth;

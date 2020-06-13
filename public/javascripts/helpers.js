@@ -9,8 +9,8 @@ const playerSpeed = 0.05;
 const obstBaseX = 3;
 ///////////////////////////////
 
-let preJumpX = null;
-let postJumpX = null;
+// let preJumpX = null;
+// let postJumpX = null;
 
 let plyrX = -3;
 let plyrY = -1.5;
